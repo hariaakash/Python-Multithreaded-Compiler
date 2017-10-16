@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+	<title>Python Compiler</title>
+
+	<!-- CSS  -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+
+<body>
+	<nav class="light-blue lighten-1" role="navigation">
+		<div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Python Compiler</a>
+			<ul class="right hide-on-med-and-down">
+				<li><a href="#">Home</a></li>
+			</ul>
+
+			<ul id="nav-mobile" class="side-nav">
+				<li><a href="#">Home</a></li>
+			</ul>
+			<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+		</div>
+	</nav>
+	<div class="section no-pad-bot" id="index-banner">
+		<div class="container">
+			<br><br>
+			<h2 class="header center blue-text">NON-INTERACTIVE PYTHON COMPILER</h2>
+			<br><br>
+
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="section">
+			<div class="row">
+				<div class="col s12 m8 offset-m2">
+					<div class="row">
+						<div class="input-field col s12">
+							<textarea id="code" class="materialize-textarea"></textarea>
+							<label for="code">Enter your code in here</label>
+						</div>
+					</div>
+					<button onclick="compileCode();" class="btn waves-effect waves-light blue" type="submit" name="action">Compile
+                        <i class="material-icons right">send</i>
+                    </button>
+					<br><br>
+					<h4><code id="out"></code></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!--  Scripts-->
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script src="js/materialize.min.js"></script>
+	<script>
+		function compileCode() {
+			var code = document.getElementById("code").value;
+			console.log(encodeURIComponent(code))
+			Materialize.toast('Started Compiling !!', 4000, "blue lighten-2 rounded");
+			$.ajax({
+				type: "POST",
+				url: "http://localhost:3000/",
+				data: 'code=' + encodeURIComponent(code),
+				success: function(data) {
+					console.log(data)
+					if (data.status == true) {
+						Materialize.toast(data.msg, 5000, "green lighten-2 rounded");
+						document.getElementById('out').innerHTML = data.out;
+					} else
+						Materialize.toast("Failed to  Compile", 5000, "red lighten-2 rounded");
+				},
+				error: function(data) {
+					Materialize.toast("Some error occurred, try again after reloading !!", 5000, "red lighten-2 rounded");
+				}
+			});
+		}
+
+	</script>
+
+</body>
+
+</html>
